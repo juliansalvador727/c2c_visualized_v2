@@ -43,6 +43,7 @@ export default function CoordinatesDisplay({
   const formatCoord = (coord: number) => coord.toFixed(1);
   return (
     <div style={containerStyle}>
+      {/* Start Marker Data */}
       <div style={titleStyle}>Start: {start.country}</div>
       <div style={coordStyle}>Latitude: {formatCoord(start.latitude)}</div>
       <div style={coordStyle}>Longitude: {formatCoord(start.longitude)}</div>
