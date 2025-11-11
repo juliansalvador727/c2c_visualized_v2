@@ -1,12 +1,25 @@
 import * as React from "react";
-import { Marker } from "react-map-gl/maplibre";
+import { Marker, MarkerDragEvent } from "react-map-gl/maplibre";
 
-interface MarkerLayerProps {
-  start: { latitude: number; longitude: number };
-  end: { latitude: number; longitude: number };
+interface Coordinates {
+  latitude: number;
+  longitude: number;
 }
 
-export default function MarkerLayer({ start, end }: MarkerLayerProps) {
+interface MarkerLayerProps {
+  start: Coordinates;
+  end: Coordinates;
+
+  onStartDragEnd: (event: MarkerDragEvent) => void;
+  onEndDragEnd: (event: MarkerDragEvent) => void;
+}
+
+export default function MarkerLayer({
+  start,
+  end,
+  onStartDragEnd,
+  onEndDragEnd,
+}: MarkerLayerProps) {
   return (
     <>
       {/* Start Marker */}
@@ -14,6 +27,8 @@ export default function MarkerLayer({ start, end }: MarkerLayerProps) {
         latitude={start.latitude}
         longitude={start.longitude}
         draggable={true}
+        onDragEnd={onStartDragEnd}
+        color="#FFB6C1"
       />
 
       {/* End Marker */}
@@ -21,6 +36,7 @@ export default function MarkerLayer({ start, end }: MarkerLayerProps) {
         latitude={end.latitude}
         longitude={end.longitude}
         draggable={true}
+        onDragEnd={onEndDragEnd}
       />
     </>
   );
