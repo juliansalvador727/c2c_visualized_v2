@@ -1,5 +1,6 @@
-import { Graph } from "./ADJ";
-import { BFS } from "./BFS";
+import { Graph } from "../utils/Adjacency";
+import { BFS } from "../utils/BFS";
+
 import borderData from "@/src/data/borders.json";
 import type { CoordsWithCountry } from "./MapView";
 

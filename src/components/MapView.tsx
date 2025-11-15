@@ -36,8 +36,6 @@ const INITIAL_END: CoordsWithCountry = {
 export default function MapView() {
   const [start, setStart] = useState(INITIAL_START);
   const [end, setEnd] = useState(INITIAL_END);
-
-  // Safe ISO state
   const [startISO, setStartISO] = useState("");
   const [endISO, setEndISO] = useState("");
 
@@ -46,7 +44,6 @@ export default function MapView() {
     shortestPath: [] as string[],
   });
 
-  // Build a safe mapping: always prefer valid iso_a3, fallback to iso_a3_eh
   const countryNameToIso: Record<string, string> = {};
   WORLD_FEATURES.forEach((feature) => {
     const props = feature.properties as any;
@@ -61,11 +58,8 @@ export default function MapView() {
     setEndISO(countryNameToIso[end.country] ?? "");
   }, [start, end]);
 
-  // BFS result state
-
   useEffect(() => {
     if (!startISO || !endISO) return;
-
     const controller = new BFSController();
     const result = controller.runBFS(
       { country: startISO } as any,
@@ -77,7 +71,6 @@ export default function MapView() {
     });
   }, [startISO, endISO]);
 
-  // Marker drag handling
   const updateMarker = useCallback(
     (event: MarkerDragEvent, isStart: boolean) => {
       const newLat = event.lngLat.lat;
@@ -98,6 +91,7 @@ export default function MapView() {
     (event: MarkerDragEvent) => updateMarker(event, true),
     [updateMarker]
   );
+
   const handleEndDragEnd = useCallback(
     (event: MarkerDragEvent) => updateMarker(event, false),
     [updateMarker]
@@ -110,7 +104,6 @@ export default function MapView() {
         style={{ width: "100%", height: "100%" }}
         mapStyle="https://tiles.basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
       >
-        {/* Country coloring layer */}
         <CountryLayer
           geoData={worldData}
           visitedCountries={bfsResult.visited}
@@ -118,21 +111,19 @@ export default function MapView() {
           startCountry={startISO}
           endCountry={endISO}
         />
-
         <NavigationControl position="top-left" />
-
-        {/* Start/end markers */}
         <MarkerLayer
           start={start}
           end={end}
           onStartDragEnd={handleStartDragEnd}
           onEndDragEnd={handleEndDragEnd}
         />
-
-        {/* Coordinates display */}
-        <CoordinatesDisplay start={start} end={end} />
-
-        {/* Separate highlight layer for start/end */}
+        <CoordinatesDisplay
+          start={start}
+          end={end}
+          visitedCountries={bfsResult.visited}
+          shortestPathCountries={bfsResult.shortestPath}
+        />
         <StartEndCountryLayer start={start.country} end={end.country} />
       </Map>
     </div>

@@ -9,6 +9,8 @@ interface Coordinates {
 interface CoordinateDisplayProps {
   start: Coordinates;
   end: Coordinates;
+  visitedCountries: string[];
+  shortestPathCountries: string[];
 }
 
 const containerStyle: React.CSSProperties = {
@@ -39,22 +41,29 @@ const coordStyle: React.CSSProperties = {
 export default function CoordinatesDisplay({
   start,
   end,
+  visitedCountries,
+  shortestPathCountries,
 }: CoordinateDisplayProps) {
   const formatCoord = (coord: number) => coord.toFixed(1);
   return (
     <div style={containerStyle}>
-      {/* Start Marker Data */}
       <div style={titleStyle}>Start: {start.country}</div>
       <div style={coordStyle}>Latitude: {formatCoord(start.latitude)}</div>
       <div style={coordStyle}>Longitude: {formatCoord(start.longitude)}</div>
       <hr
         style={{ margin: "8px 0", border: "none", borderTop: "1px solid #ccc" }}
       />
-
-      {/* End Marker Data */}
       <div style={titleStyle}>End: {end.country}</div>
       <div style={coordStyle}>Latitude: {formatCoord(end.latitude)}</div>
       <div style={coordStyle}>Longitude: {formatCoord(end.longitude)}</div>
+      <hr
+        style={{ margin: "8px 0", border: "none", borderTop: "1px solid #ccc" }}
+      />
+      <div style={titleStyle}>Stats:</div>
+      <div style={coordStyle}>Visited Countries: {visitedCountries.length}</div>
+      <div style={coordStyle}>
+        Shortest Path: {shortestPathCountries.length}
+      </div>
     </div>
   );
 }
